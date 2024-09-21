@@ -16,10 +16,14 @@ import Brand from "./components/Brand";
 import ProductCard from "./components/ProductCard";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import Tail from './components/Tail';
 
 function App() {
   return (
     <>
+      <NavBar />
+      <Footer />
+      <Tail />
     </>
   );
 }
