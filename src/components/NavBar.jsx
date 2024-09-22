@@ -6,6 +6,7 @@ import {
     ShoppingBag,
     Menu,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function NavBar({ logo }) {
     return (
@@ -32,20 +33,26 @@ function NavBar({ logo }) {
                         type="text"
                         placeholder="Search everything"
                         className="border-none outline-none w-full text-gray-500 bg-gray-100 p-2"
-                    />
-                </div>
+                />
+            </div>
             <div className="flex items-center gap-4 w-2/5 h-full justify-end">
-                <div className="flex flex-col items-center">
-                    <Store />
-                    <span>Store Finder</span>
+                <div >
+                    <Link to="/store-finder" className="flex flex-col items-center">
+                        <Store />
+                        <span>Store Finder</span>
+                    </Link>
                 </div>
-                <div className="flex flex-col items-center">
-                    <UserRound />
-                    <span>Account</span>
-                </div>
-                <div className="flex flex-col items-center">
-                    <ShoppingBag />
-                    <span>My Bag</span>
+                <div >
+                    <Link to="/login" className="flex flex-col items-center">
+                        <UserRound />
+                        <span>Account</span>
+                    </Link>
+                    </div>
+                    <div>
+                    <Link to="/my-bag" className="flex flex-col items-center">
+                        <ShoppingBag />
+                        <span>My Bag</span>
+                    </Link>
                 </div>
             </div>
         </nav>

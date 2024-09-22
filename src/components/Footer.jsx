@@ -2,10 +2,12 @@ import FooterCard from "./FooterCard";
 import cash from '../assets/cash-icon.png';
 import freeShipping from '../assets/free-shipping.png';
 import headSet from '../assets/head-set.png';
+import Tail from "./Tail";
 
 function Footer() {
     return (
-        <footer
+        <>
+                <footer
             className="bg-blue-700 text-white px-[4%] pb-[5%] pt-[2%] bg-[url('./assets/footerBg.png')]"
             style={{ filter: "grayscale(80%)" }}
         >
@@ -130,6 +132,8 @@ function Footer() {
                 </div>
             </div>
         </footer>
+        <Tail/>
+        </>
     );
 }
 

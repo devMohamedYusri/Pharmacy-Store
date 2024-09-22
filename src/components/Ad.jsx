@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from './Button'
+import Button from '../design/Button'
 
 function Ad({ title, description, btnText, image }) {
     return (
