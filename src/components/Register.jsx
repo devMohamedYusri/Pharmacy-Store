@@ -4,18 +4,54 @@ import Hint from "../design/Hint";
 import LoginTitle from "../design/LoginTitle";
 import LoginP from "../design/LoginP";
 import Button from "../design/Button";
+import { Navigate } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error,setError]=useState(null);
+  const [loading,setLoading]=useState(false);
+  const handleSubmit=async (e)=>{
+    e.preventDefault();
+    if(password==confirmPassword){
+      try {
+        const response = await fetch("http://pharmacy1.runasp.net/api/Account/Register", {
+          method: "post",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          'body': JSON.stringify({ name,email, password }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Login failed');
+        } else {
+          const data = await response.json();
+          console.log('Login successful:', data);
+          localStorage.setItem('token', data.token);
+          Navigate('/');
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }else{
+      setError("the password not matched")
+    }
+  }
   return (
     <div className="flex flex-col items-center justify-center shadow-lg w-1/3 mx-auto my-28 p-20 h-[70vh]">
       <LoginTitle text="Create an account" />
       <LoginP text="Enter your details to register:" />
-      <form className="flex flex-col items-center justify-center w-full">
+      <div>
+        {error && <p className="text-red-400 p-3 font-semibold">{error}</p>}
+        {loading && <Hint text="Loading..." type="loading" />}
+        {!loading && <Hint text="Register" type="success" />}
+      </div>
+      <form className="flex flex-col items-center justify-center w-full" onSubmit={handleSubmit}>
         <LoginInput name="Name" type="text" value={name} setValue={setName} />
         <LoginInput name="Email" type="email" value={email} setValue={setEmail} />
         <LoginInput name="Password" type="password" value={password} setValue={setPassword} />
@@ -26,5 +62,4 @@ function Register() {
     </div>
   );
 }
-
 export default Register;
