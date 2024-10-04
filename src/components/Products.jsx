@@ -23,8 +23,9 @@ const ProductSwiper = ({start,stop}) => {
       className="py-10 w-[94%]"
     >
       {displayedProducts.map(product => (
-        <SwiperSlide key={`${product.productName}${product.productPrice}`}>
+        <SwiperSlide key={product.productId}>
           <ProductCard
+            id={product.productId}
             productImg={image1}
             productName={product.productName}
             productPrice={product.price}

@@ -2,84 +2,123 @@ import { useEffect, useState } from 'react';
 import Comment from './Comment';
 import Details from './Details';
 import { useParams } from 'react-router-dom';
-
-
-// Sample data for product details and comments
-const sampleProduct = {
-    id: 1,
-    name: "Sample Product",
-    description: "This is a detailed description of the sample product.",
-    price: 29.99,
-    shippingInfo: "Ships within 2-3 business days. Free shipping on orders over $50.",
-    imageUrl: "https://via.placeholder.com/400",
-};
-
-const sampleComments = [
-    { id: 1, userName: "Alice", text: "Great product! Highly recommend.", rating: 5 },
-    { id: 2, userName: "Bob", text: "Decent quality for the price.", rating: 4 },
-];
+import Footer from './Footer';
+import NavBar from './NavBar';
+import logo from "../assets/dalida.jpg";
+import img from "../assets/Bloom-22.jpg";
+import secureLocalStorage from "react-secure-storage";
+import Loader from './Loader';
 
 const ProductDetails = () => {
-    const {id}=useParams();
-    // State to manage new comment input
+    const { id } = useParams();
     const [newComment, setNewComment] = useState("");
-    const [comments, setComments] = useState(sampleComments);
-        useEffect(()=>{
-        const response=fetch("http://pharmacy1.runasp.net/api/Product/id")
-        .catch((err)=>{
-            console.log("error ",err.message);
-        })
-        .finally(()=>{});
-    },[])
-    // Function to handle submitting a new comment
+    const [comments, setComments] = useState([]);
+    const [product,setProduct]=useState({});
+    const [loading,setLoading]=useState(true);
+    useEffect(() => {
+        setTimeout(()=>{
+            setLoading(false);
+        },500)
+            fetch(`http://pharmacy1.runasp.net/api/Product/${id}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("failed to fetch details product");
+                }
+                return res.json();
+            }).then(data => {
+                setProduct(data); 
+            })
+            .catch(err=>{
+            console.log("error on fetching ", err);
+            })}, [id])
+
+            useEffect(() => {
+                fetch(`http://pharmacy1.runasp.net/api/ProductReview/GetAll`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("failed to fetch reviews product");
+                    }
+                    return res.json();
+                }).then(data => {
+                    setComments(data);
+                })
+                .catch(err=>{
+                console.log("error on fetching ", err);
+                })}, [id])
+                const userData = secureLocalStorage.getItem('user');
+                let username = 'Guest';
+                try {
+                    if (userData && typeof userData.email === 'string') {
+                        username = userData.firstName;
+                    }
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                }
     const handleCommentSubmit = (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
-
-        // Create a new comment object
-        const newCommentObj = {
-            id: comments.length + 1, // Simple ID generation based on current length
-            userName: "Guest", // Placeholder for username (could be replaced with actual user data)
+        e.preventDefault();
+        const Comment = {
+            userName: username, 
             text: newComment,
-            rating: 5, // Default rating; you can modify this to allow users to select a rating
         };
+        setNewComment("");
+        fetch(`http://pharmacy1.runasp.net/api/ProductReview/Add`,{
+            method:"post",
+            header:{
+                "Content-type":"application/json"
+            },
+            'body':JSON.stringify({Comment})
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("failed to send product review");
+            }
+            return res.json();
+        })
+        .catch(err=>{
+            console.log("error on sending  ", err);
+        })
 
-        // Update comments state with the new comment
-        setComments([...comments, newCommentObj]);
-        setNewComment(""); // Clear the input field after submission
     };
 
     return (
-        <div className="container mx-auto p-5 w-[90%]">
-            <Details
-                imageUrl={sampleProduct.imageUrl}
-                name={sampleProduct.name}
-                desc={sampleProduct.description}
-                shippingInfo={sampleProduct.shippingInfo} 
+        <>
+      {loading ? <Loader visible={loading} /> : <>
+            <NavBar logo={logo} />
+            <div className="container mx-auto p-5 w-[90%]">
+                <Details
+                    imageUrl={img}
+                    name={product.productName}
+                    desc={product.description}
+                    price={product.price}
+                    quantity={product.quantityInStock}
+                    shippingInfo={"dkkdkd"}
                 />
 
-            <div className="mt-10">
-                <h2 className="text-xl font-semibold">Comments</h2>
-                <form onSubmit={handleCommentSubmit} className="mt-4">
-                    <textarea
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Leave a comment..."
-                        rows="4"
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                        required
-                    />
-                    <button type="submit" className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Submit Comment
-                    </button>
-                </form>
+                <div className="mt-10">
+                    <h2 className="text-xl font-semibold">Comments</h2>
+                    <form onSubmit={handleCommentSubmit} className="mt-4">
+                        <textarea
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Leave a comment..."
+                            rows="4"
+                            className="w-full p-2 border border-gray-300 rounded-md"
+                            required
+                        />
+                        <button type="submit" className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            Submit Comment
+                        </button>
+                    </form>
 
-                <div className="mt-6">
-                    {comments.map(comment => (
-                        <Comment key={comment.id} PText={comment.text} />
-                    ))}
+                    <div className="mt-6">
+                        {comments.map(comment => (
+                            <Comment key={comment.reviewId} comment={comment} />
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
+            <Footer />
+        </>}</>
     );
 };
 
