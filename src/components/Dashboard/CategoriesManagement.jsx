@@ -1,26 +1,83 @@
-import { useState } from 'react';
-import { Edit2, Trash2, PlusCircle } from 'lucide-react';
-
-const initialCategories = [
-    { id: 1, name: 'Electronics' },
-    { id: 2, name: 'Clothing' },
-];
+import { useEffect, useState } from 'react';
+import { Edit2, PlusCircle } from 'lucide-react';
+import UpdateModal from './UpdateModal';
+import Loader from '../Loader';
 
 const CategoriesManagement = () => {
-    const [categories, setCategories] = useState(initialCategories);
+    const [categories, setCategories] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [newCategoryName, setNewCategoryName] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentCategory, setCurrentCategory] = useState(null);
 
-    const handleAddCategory = () => {
-        const newCategory = {
-            id: categories.length + 1,
-            name: newCategoryName,
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('http://pharmacy1.runasp.net/api/Category/GetAll');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch categories');
+                }
+                const data = await response.json();
+                setCategories(data);
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setIsLoading(false);
+            }
         };
-        setCategories([...categories, newCategory]);
-        setNewCategoryName('');
+
+        fetchCategories();
+    }, []);
+
+    const handleAddCategory = async () => {
+        try {
+            const response = await fetch('http://pharmacy1.runasp.net/api/Category/Add', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ categoryName: newCategoryName })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to add category');
+            }
+    
+            const newCategory = await response.json(); 
+            setCategories(prevCategories => [...prevCategories, newCategory]); 
+            setNewCategoryName(''); 
+        } catch (error) {
+            console.error("Error adding category:", error);
+        }
     };
 
-    const handleDeleteCategory = (id) => {
-        setCategories(categories.filter(category => category.id !== id));
+    const handleEditClick = (category) => {
+        setCurrentCategory(category);
+        setIsModalOpen(true); 
+    };
+
+    const handleUpdateCategory = async (updatedData) => {
+        try {
+            const response = await fetch(`http://pharmacy1.runasp.net/api/Category/Update?id=${currentCategory.categoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(updatedData), 
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to update category');
+            }
+
+            setCategories(prevCategories => 
+                prevCategories.map(cat => cat.categoryId === currentCategory.categoryId ? { ...cat, ...updatedData } : cat)
+            );
+        } catch (error) {
+            console.error('Error updating category:', error);
+        }
     };
 
     return (
@@ -38,31 +95,41 @@ const CategoriesManagement = () => {
                     <PlusCircle className="inline mr-1" /> Add Category
                 </button>
             </div>
-            <table className="min-w-full border-collapse border border-gray-200">
-                <thead>
-                    <tr>
-                        <th className="border border-gray-200 p-2">ID</th>
-                        <th className="border border-gray-200 p-2">Category Name</th>
-                        <th className="border border-gray-200 p-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {categories.map(category => (
-                        <tr key={category.id}>
-                            <td className="border border-gray-200 p-2">{category.id}</td>
-                            <td className="border border-gray-200 p-2">{category.name}</td>
-                            <td className="border border-gray-200 p-2">
-                                <button onClick={() => console.log('Edit', category.id)}>
-                                    <Edit2 className="inline" />
-                                </button>
-                                <button onClick={() => handleDeleteCategory(category.id)} className="ml-2">
-                                    <Trash2 className="inline text-red-500" />
-                                </button>
-                            </td>
+            
+            {isLoading ? (
+                <Loader visible={isLoading} />
+            ) : (
+                <table className="min-w-full border-collapse border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th className="border border-gray-200 p-2">ID</th>
+                            <th className="border border-gray-200 p-2">Category Name</th>
+                            <th className="border border-gray-200 p-2">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {categories.map(category => (
+                            <tr key={category.categoryId}>
+                                <td className="border border-gray-200 p-2">{category.categoryId}</td>
+                                <td className="border border-gray-200 p-2">{category.categoryName}</td>
+                                <td className="border border-gray-200 p-2">
+                                    <button onClick={() => handleEditClick(category)}>
+                                        <Edit2 className="inline" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+
+            <UpdateModal 
+                isOpen={isModalOpen} 
+                closeModal={() => setIsModalOpen(false)} 
+                fields={[{ name: 'categoryName', label: 'Category Name' }]} 
+                initialData={currentCategory} 
+                onSubmit={handleUpdateCategory} 
+            />
         </div>
     );
 };

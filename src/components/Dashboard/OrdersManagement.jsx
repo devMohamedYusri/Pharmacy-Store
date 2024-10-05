@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Edit2, Trash2, PlusCircle } from 'lucide-react';
+import { Edit2, Trash2 } from 'lucide-react';
+import UpdateModal from './UpdateModal'; 
 
 const initialOrders = [
     { id: 1, customerName: 'John Doe', totalAmount: '$100', status: 'Pending' },
@@ -8,58 +9,40 @@ const initialOrders = [
 
 const OrdersManagement = () => {
     const [orders, setOrders] = useState(initialOrders);
-    const [newCustomerName, setNewCustomerName] = useState('');
-    const [newTotalAmount, setNewTotalAmount] = useState('');
-    const [newStatus, setNewStatus] = useState('Pending');
+    const [selectedOrder, setSelectedOrder] = useState(null); 
+    const [isModalOpen, setIsModalOpen] = useState(false); 
 
-    const handleAddOrder = () => {
-        const newOrder = {
-            id: orders.length + 1,
-            customerName: newCustomerName,
-            totalAmount: newTotalAmount,
-            status: newStatus,
-        };
-        setOrders([...orders, newOrder]);
-        setNewCustomerName('');
-        setNewTotalAmount('');
-        setNewStatus('Pending');
+    const openModal = (order) => {
+        setSelectedOrder(order);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedOrder(null);
+    };
+
+    const handleOrderUpdate = (updatedOrder) => {
+        setOrders((prevOrders) =>
+            prevOrders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order))
+        );
+        closeModal(); 
     };
 
     const handleDeleteOrder = (id) => {
         setOrders(orders.filter(order => order.id !== id));
     };
 
+    const orderFields = [
+        { name: 'customerName', label: 'Customer Name', type: 'text' },
+        { name: 'totalAmount', label: 'Total Amount', type: 'text' },
+        { name: 'status', label: 'Status', type: 'select', options: ['Pending', 'Completed'] }, 
+    ];
+
     return (
         <div className="ml-64 p-4">
             <h1 className="text-xl font-bold mb-4">Orders Management</h1>
-            <div className="mb-4">
-                <input
-                    type="text"
-                    placeholder="Customer Name"
-                    value={newCustomerName}
-                    onChange={(e) => setNewCustomerName(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Total Amount"
-                    value={newTotalAmount}
-                    onChange={(e) => setNewTotalAmount(e.target.value)}
-                    className="border p-2 mr-2"
-                />
-                <select
-                    value={newStatus}
-                    onChange={(e) => setNewStatus(e.target.value)}
-                    className="border p-2 mr-2"
-                >
-                    <option value="Pending">Pending</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
-                <button onClick={handleAddOrder} className="bg-blue-500 text-white p-2">
-                    <PlusCircle className="inline mr-1" /> Add Order
-                </button>
-            </div>
+
             <table className="min-w-full border-collapse border border-gray-200">
                 <thead>
                     <tr>
@@ -78,7 +61,7 @@ const OrdersManagement = () => {
                             <td className="border border-gray-200 p-2">{order.totalAmount}</td>
                             <td className="border border-gray-200 p-2">{order.status}</td>
                             <td className="border border-gray-200 p-2">
-                                <button onClick={() => console.log('Edit', order.id)}>
+                                <button onClick={() => openModal(order)} className="mr-2">
                                     <Edit2 className="inline" />
                                 </button>
                                 <button onClick={() => handleDeleteOrder(order.id)} className="ml-2">
@@ -89,6 +72,16 @@ const OrdersManagement = () => {
                     ))}
                 </tbody>
             </table>
+
+            {isModalOpen && (
+                <UpdateModal
+                    isOpen={isModalOpen}
+                    closeModal={closeModal}
+                    fields={orderFields} 
+                    initialData={selectedOrder}
+                    onSubmit={handleOrderUpdate}
+                />
+            )}
         </div>
     );
 };

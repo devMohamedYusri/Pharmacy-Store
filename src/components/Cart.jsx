@@ -1,85 +1,145 @@
 import { useState } from 'react';
+import { Plus, Minus, Trash2 } from 'lucide-react';
 import logo from "../assets/dalida.jpg";
 import Footer from './Footer';
 import NavBar from './NavBar';
-// Sample order data (you can replace this with your actual data)
+import Loader from './Loader';
 const sampleOrders = [
-    { id: 1, name: 'Product 1', quantity: 2, price: 20 },
-    { id: 2, name: 'Product 2', quantity: 1, price: 50 },
-    { id: 3, name: 'Product 3', quantity: 3, price: 15 },
+    {
+        id: 1,
+        name: 'Relaxed Fit T-shirt',
+        size: 'XL',
+        color: 'Blue',
+        quantity: 1,
+        price: 12.99,
+        inStock: true,
+    },
+    {
+        id: 2,
+        name: 'Nylon Sports Cap',
+        size: 'One Size',
+        color: 'Lavender',
+        quantity: 1,
+        price: 14.99,
+        inStock: false,
+        availableIn: '2 days',
+    },
 ];
 
 const Cart = () => {
     const [orders, setOrders] = useState(sampleOrders);
-    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [loading, setLoading] = useState(true);
+    setTimeout(()=>{
+        setLoading(false);
+    },500)
+    const updateOrderQuantity = (orderId, amount) => {
+        const updatedOrders = orders.map(order =>
+            order.id === orderId
+                ? { ...order, quantity: Math.max(1, order.quantity + amount) }
+                : order
+        );
+        setOrders(updatedOrders);
+    };
 
-    const removeOrder = (orderId) => {
+    const removeOrder = orderId => {
         setOrders(orders.filter(order => order.id !== orderId));
     };
 
-    const viewOrderDetails = (order) => {
-        setSelectedOrder(order);
-    };
-
-    const closeDetails = () => {
-        setSelectedOrder(null);
-    };
+    const totalPrice = orders.reduce(
+        (total, order) => total + order.price * order.quantity,
+        0
+    );
 
     return (
         <>
-            <NavBar logo={logo} />
-        <div className="max-w-3xl mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Review Orders</h1>
-            {orders.length === 0 ? (
-                <p className="text-gray-500">Your cart is empty.</p>
-            ) : (
-                <ul className="space-y-4">
-                    {orders.map(order => (
-                        <li key={order.id} className="border rounded-md p-4 flex justify-between items-center">
-                            <div>
-                                <h2 className="text-lg font-semibold">{order.name}</h2>
-                                <p>Quantity: {order.quantity}</p>
-                                <p>Price: ${order.price * order.quantity}</p>
-                            </div>
-                            <div className="flex space-x-2">
-                                <button 
-                                    onClick={() => viewOrderDetails(order)} 
-                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            {loading ? <Loader visible={loading} /> : 
+                <>
+            <NavBar logo={logo}/>
+                <div className="flex flex-col md:flex-row justify-between p-6 bg-gray-50 rounded-lg shadow-lg max-w-7xl mx-auto my-10">
+                    <div className="w-full md:w-2/3 space-y-6">
+                        <h1 className="text-3xl font-bold mb-6">Cart</h1>
+                        {orders.map(order => (
+                            <div
+                                key={order.id}
+                                className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm"
+                            >
+                                <div className="flex items-center">
+                                    {/* <img
+                                        src={order.image}
+                                        alt={order.name}
+                                        className="w-24 h-24 rounded-lg object-cover"
+                                    /> */}
+                                    <div className="ml-4">
+                                        <h2 className="text-xl font-semibold">{order.name}</h2>
+                                        <p className="text-sm text-gray-500">description: {order.description}</p>
+                                        <p className="text-lg font-bold text-gray-800">${order.price}</p>
+                                        <p
+                                            className={`text-sm ${order.inStock ? 'text-green-500' : 'text-red-500'
+                                                }`}
+                                        >
+                                            {order.inStock ? 'In Stock' : `Available in ${order.availableIn}`}
+                                        </p>
+                                        <div className="flex items-center space-x-2 mt-2">
+                                            <button
+                                                onClick={() => updateOrderQuantity(order.id, -1)}
+                                                className="p-1 bg-gray-100 rounded-md hover:bg-gray-200"
+                                            >
+                                                <Minus className="w-4 h-4 text-gray-600" />
+                                            </button>
+                                            <span className="px-4 py-1 text-lg font-semibold bg-gray-100 rounded-md">
+                                                {order.quantity}
+                                            </span>
+                                            <button
+                                                onClick={() => updateOrderQuantity(order.id, 1)}
+                                                className="p-1 bg-gray-100 rounded-md hover:bg-gray-200"
+                                            >
+                                                <Plus className="w-4 h-4 text-gray-600" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => removeOrder(order.id)}
+                                    className="p-2 rounded-full bg-red-500 hover:bg-red-600 text-white"
                                 >
-                                    View Details
-                                </button>
-                                <button 
-                                    onClick={() => removeOrder(order.id)} 
-                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                                >
-                                    Remove
+                                    <Trash2 className="w-5 h-5" />
                                 </button>
                             </div>
-                        </li>
-                    ))}
-                </ul>
-            )}
+                        ))}
+                    </div>
 
-            {selectedOrder && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-                        <h2 className="text-xl font-bold mb-4">Order Details</h2>
-                        <p><strong>Product:</strong> {selectedOrder.name}</p>
-                        <p><strong>Quantity:</strong> {selectedOrder.quantity}</p>
-                        <p><strong>Price:</strong> ${selectedOrder.price * selectedOrder.quantity}</p>
-                        <button 
-                            onClick={closeDetails} 
-                            className="mt-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                        >
-                            Close
+                    <div className="w-full md:w-1/3 mt-6 md:mt-0 bg-white p-6 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
+                        <div className="flex justify-between mb-4">
+                            <span className="text-gray-600">Subtotal</span>
+                            <span className="font-bold">${totalPrice.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between mb-4">
+                            <span className="text-gray-600">Discount</span>
+                            <span className="font-bold">-</span>
+                        </div>
+                        <div className="flex justify-between mb-4">
+                            <span className="text-gray-600">Delivery</span>
+                            <span className="font-bold">Free</span>
+                        </div>
+                        <div className="flex justify-between mb-4">
+                            <span className="text-gray-600">Tax</span>
+                            <span className="font-bold">$0.00</span>
+                        </div>
+                        <hr className="my-4" />
+                        <div className="flex justify-between text-xl font-bold">
+                            <span>Total</span>
+                            <span>${totalPrice.toFixed(2)}</span>
+                        </div>
+                        <button className="mt-6 w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600">
+                            Proceed to Checkout
                         </button>
                     </div>
                 </div>
-            )}
-        </div>
-    <Footer />
-    </>
+                <Footer/>
+            </>}
+        </>
     );
 };
 
-export default Cart;
+export default Cart

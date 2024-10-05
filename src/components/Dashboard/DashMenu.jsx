@@ -4,10 +4,12 @@ import Button from './../../design/Button';
 import secureLocalStorage from 'react-secure-storage';
 import Loader from '../Loader';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 function DashMenu() {
     const [loading, setLoading] = useState(false);
-
+    const location = useLocation();
+    const navigate=useNavigate();
+    const pages = ["products", "orders", "categories", "comments"];
     const handleLogout = () => {
         setLoading(true);
         setTimeout(() => {
@@ -15,6 +17,7 @@ function DashMenu() {
         }, 200);
         secureLocalStorage.removeItem('user');
         localStorage.removeItem('token');
+        navigate('/login')
     };
     return (
         <>
@@ -23,10 +26,12 @@ function DashMenu() {
                     <h1 className={`text-2xl font-bold text-blue-600 p-3`}>Dashboard</h1>
                     <div className={`flex flex-col gap-4 w-full`}>
                         <div className={`border-2 border-gray-300 p-4`}>
-                            <Link to='/dashboard/products/' > <Button text="Products" type="button" className="w-full mt-2 bg-blue-500" /></Link>
-                            <Link to='/dashboard/orders/' > <Button text="Orders" type="button" className="w-full mt-2 bg-blue-500" /></Link>
-                            <Link to='/dashboard/categories/' > <Button text="Categories" type="button" className="w-full mt-2 bg-blue-500" /></Link>
-                            <Link to='/dashboard/comments/' > <Button text="comments" type="button" className="w-full mt-2 bg-blue-500" /></Link>
+                            {pages.map(page => (
+                                <Link key={page} to={`${page}/`} > 
+                                <Button text={page} type="button" 
+                                className={`w-full mt-2 ${location.pathname === `/dashboard/${page}/`
+                                    ? 'bg-slate-600' : 'bg-blue-500 '}`} /></Link>)
+                    )}
                         </div>
                         <div className="absolute bottom-0 z-10 mt-2 bg-white border border-gray-300 rounded-md shadow-lg w-full">
                             <ul className="py-1">

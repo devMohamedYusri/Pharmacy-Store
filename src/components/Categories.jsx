@@ -3,6 +3,7 @@ import IconCategory from './IconCategory';
 import face from '../assets/face.png';
 import TitleSection from '../design/TitleSection';
 function Categories() {
+    
     return (
         <div>
             <TitleSection text="SHOP OUR POPULAR CATEGORIES"/>

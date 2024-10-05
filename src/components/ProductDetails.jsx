@@ -32,7 +32,7 @@ const ProductDetails = () => {
             console.log("error on fetching ", err);
             })}, [id])
 
-            useEffect(() => {
+            useEffect(() => {4
                 fetch(`http://pharmacy1.runasp.net/api/ProductReview/GetAll`)
                 .then(res => {
                     if (!res.ok) {
@@ -40,12 +40,14 @@ const ProductDetails = () => {
                     }
                     return res.json();
                 }).then(data => {
+                    console.log(data);
                     setComments(data);
                 })
                 .catch(err=>{
                 console.log("error on fetching ", err);
                 })}, [id])
-                const userData = secureLocalStorage.getItem('user');
+                const userData = JSON.parse(secureLocalStorage.getItem('user'));
+                console.log(userData,"from product details");   
                 let username = 'Guest';
                 try {
                     if (userData && typeof userData.email === 'string') {
@@ -57,16 +59,18 @@ const ProductDetails = () => {
     const handleCommentSubmit = (e) => {
         e.preventDefault();
         const Comment = {
-            userName: username, 
-            text: newComment,
+            ProductId: id,
+            email: userData.email,
+            ContentReview: newComment,
         };
+        console.log("Comment ",Comment);
         setNewComment("");
         fetch(`http://pharmacy1.runasp.net/api/ProductReview/Add`,{
             method:"post",
-            header:{
-                "Content-type":"application/json"
+            headers:{
+                "Content-Type":"application/json"
             },
-            'body':JSON.stringify({Comment})
+            'body':JSON.stringify(Comment)
         })
         .then(res => {
             if (!res.ok) {
@@ -82,7 +86,7 @@ const ProductDetails = () => {
 
     return (
         <>
-      {loading ? <Loader visible={loading} /> : <>
+    {loading ? <Loader visible={loading} /> : <>
             <NavBar logo={logo} />
             <div className="container mx-auto p-5 w-[90%]">
                 <Details

@@ -8,7 +8,7 @@ import ViewProducts from "./ProductsManagement";
 import OrdersManagement from "./OrdersManagement";
 import CategoriesManagement from './CategoriesManagement';
 import CommentsManagement from "./CommentsManagement";
-
+import { ProductProvider } from "../../contexts/ProductsContext";
 function Dashboard() {
     const [loading, setLoading] = useState(true);
     useEffect(()=>{

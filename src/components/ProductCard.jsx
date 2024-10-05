@@ -19,9 +19,9 @@ function ProductCard({
     // useEffect(async ()=>{
       
     // },[id])
-    // const handleClick=()=>{
-    //     addToCart(id);
-    // }
+    const handleClick=()=>{
+        addToCart(id);
+    }
     return (
         <Link to={`/product/details/${id}`} className={`border border-gray-300 p-2 ${className}`} >
             <img src={productImg} alt="product" className="w-full h-1/2 object-contain"/>

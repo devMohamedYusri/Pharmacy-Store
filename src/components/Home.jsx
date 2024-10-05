@@ -13,7 +13,7 @@ function Home() {
     const [loading, setLoading] = useState(true);
     setTimeout(() => {
         setLoading(false);
-    }, 3000);
+    }, 1200);
     return (
         <>
             {loading ? <Loader visible={loading} /> : (<>
