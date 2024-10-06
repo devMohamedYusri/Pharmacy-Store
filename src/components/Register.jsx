@@ -4,7 +4,7 @@ import Hint from "../design/Hint";
 import LoginTitle from "../design/LoginTitle";
 import LoginP from "../design/LoginP";
 import Button from "../design/Button";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Footer from './Footer';
 import NavBar from './NavBar';
 import logo from "../assets/dalida.jpg";
@@ -19,6 +19,8 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password == confirmPassword) {
@@ -41,7 +43,7 @@ function Register() {
           const data = await response.json();
           console.log('Login successful:', data);
           localStorage.setItem('token', data.token);
-          Navigate('/');
+          navigate('/');
         }
       } catch (err) {
         setError(err.message);

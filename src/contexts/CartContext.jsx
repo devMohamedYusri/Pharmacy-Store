@@ -18,14 +18,20 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    const addToCart = async ({ProductId,Quantity,UnitPrice,LinePrice}) => {
+    const addToCart = async ({UserEmail,ProductId,Quantity,UnitPrice,LinePrice}) => {
         try {
             const response = await fetch('http://pharmacy1.runasp.net/api/ShoppingCartItem/Add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ProductId,Quantity,UnitPrice,LinePrice}),
+                body: JSON.stringify({
+                    "ProductId":ProductId,
+                    "Quantity": Quantity,
+                    "UnitPrice":  UnitPrice,
+                    "LineTotal": LinePrice,
+                    "email": UserEmail
+                }),
             });
 
             if (!response.ok) {
