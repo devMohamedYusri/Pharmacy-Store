@@ -25,7 +25,7 @@ const ViewProducts = () => {
     };
 
     const handleProductUpdate = (updatedProduct) => {
-        fetch('http://pharmacy1.runasp.net/api/Product/update', {
+        fetch('https://pharmacy1.runasp.net/api/Product/update', {
             method:"PUT",
             headers:{
                 "Content-Type":"application/json"
@@ -48,7 +48,7 @@ const ViewProducts = () => {
             categoryId: newProductCategory,
             stock: newProductStock,
         };
-        fetch('http://pharmacy1.runasp.net/api/Product/Create', {
+        fetch('https://pharmacy1.runasp.net/api/Product/Create', {
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
