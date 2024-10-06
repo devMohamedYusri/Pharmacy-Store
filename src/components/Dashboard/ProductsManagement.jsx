@@ -64,7 +64,7 @@ const ViewProducts = () => {
     };
 
     const handleDeleteProduct = (id) => {
-        fetch(`http://pharmacy1.runasp.net/api/Product/Delete?id=${id}`, { method: "DELETE" })
+        fetch(`https://pharmacy1.runasp.net/api/Product/Delete?id=${id}`, { method: "DELETE" })
             .then(() => {
                 setDisplayProducts(displayProducts.filter(product => product.productId !== id));
             })
