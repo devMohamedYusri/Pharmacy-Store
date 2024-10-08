@@ -5,7 +5,7 @@ import { Edit2, Trash2, PlusCircle } from 'lucide-react';
 const CommentsManagement = () => {
     const [comments, setComments] = useState([]);
         useEffect(() => {
-        fetch(`http://pharmacy1.runasp.net/api/ProductReview/GetAll`)
+        fetch(`https://pharmacy1.runasp.net/api/ProductReview/GetAll`)
         .then(res => {
             if (!res.ok) {
                 throw new Error("failed to fetch reviews product");
@@ -20,7 +20,7 @@ const CommentsManagement = () => {
         })}, [])
 
         useEffect(() => {
-            fetch(`http://pharmacy1.runasp.net/api/ProductReview/GetAll`)
+            fetch(`https://pharmacy1.runasp.net/api/ProductReview/GetAll`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error("failed to fetch reviews product");
@@ -37,7 +37,7 @@ const CommentsManagement = () => {
     
 
     const handleDeleteComment = (id) => {
-        fetch(`http://pharmacy1.runasp.net/api/ProductReview/Delete?id=${id}`, { method: "delete" })
+        fetch(`https://pharmacy1.runasp.net/api/ProductReview/Delete?id=${id}`, { method: "delete" })
         .catch(err => {
             console.log("error on fetching ", err);
         })

@@ -13,7 +13,7 @@ const CategoriesManagement = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://pharmacy1.runasp.net/api/Category/GetAll');
+                const response = await fetch('https://pharmacy1.runasp.net/api/Category/GetAll');
                 if (!response.ok) {
                     throw new Error('Failed to fetch categories');
                 }
@@ -31,7 +31,7 @@ const CategoriesManagement = () => {
 
     const handleAddCategory = async () => {
         try {
-            const response = await fetch('http://pharmacy1.runasp.net/api/Category/Add', {
+            const response = await fetch('https://pharmacy1.runasp.net/api/Category/Add', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const CategoriesManagement = () => {
 
     const handleUpdateCategory = async (updatedData) => {
         try {
-            const response = await fetch(`http://pharmacy1.runasp.net/api/Category/Update?id=${currentCategory.categoryId}`, {
+            const response = await fetch(`https://pharmacy1.runasp.net/api/Category/Update?id=${currentCategory.categoryId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
