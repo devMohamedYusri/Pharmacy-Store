@@ -14,12 +14,12 @@ function Footer() {
             <div className="flex items-center justify-center pb-10">
                 <FooterCard
                     title="FAST & FREE SHIPPING"
-                    description="Get your order delivered same day or next day according to your location in Cairo & Giza. We also offer Bloom super saver delivery within 2-3 business days in Cairo & Giza. In other locations you will receive your order within 2-7 business days."
+                    description="Get your order delivered same day or next day according to your location in Cairo & Giza. We also offer dalida super saver delivery within 2-3 business days in Cairo & Giza. In other locations you will receive your order within 2-7 business days."
                     icon={freeShipping}
                 />
                 <FooterCard
                     title="DISCOUNTS & OFFERS"
-                    description="Bloom keeps running different promotions on its website and stores where you can benefit from discounts being offered on a wide variety of items. On the basis of the relevant promotion, the discount may be applied automatically or a coupon code may have to be used to avail of the discount."
+                    description="dalida keeps running different promotions on its website and stores where you can benefit from discounts being offered on a wide variety of items. On the basis of the relevant promotion, the discount may be applied automatically or a coupon code may have to be used to avail of the discount."
                     icon={cash}
                 />
                 <FooterCard
@@ -29,7 +29,7 @@ function Footer() {
                 />
                 <FooterCard
                     title="CUSTOMER SUPPORT"
-                    description="We're here to help, so please find the most relevant way to get in touch, please contact our Customer Service by email at customersupport@bloompharmacy.com or call us on 01026562982 (from 10am to 6pm)."
+                    description="We're here to help, so please find the most relevant way to get in touch, please contact our Customer Service by email at customersupport@dalidapharmacy.com or call us on 01026562982 (from 10am to 6pm)."
                 />
             </div>
             <hr className="border-white w-full pb-10" />
@@ -58,7 +58,7 @@ function Footer() {
                     </li>
                 </ul>
                 <div className="flex flex-col gap-4 items-center justify-center  mt-10">
-                    <p className="text-xl mb-5 text-center uppercase">About Bloom</p>
+                    <p className="text-xl mb-5 text-center uppercase">About dalida</p>
                     <p className="text-sm text-center max-w-[70%]">
                         Your go-to online pharmacy in Egypt! Explore a large selection of
                         skincare, makeup, hair, perfumes & more from top beauty brands.
@@ -66,7 +66,7 @@ function Footer() {
                 </div>
                 <div className="socials mt-10 ">
                     <p className="text-xl mb-5 text-center uppercase">
-                        Socialize with bloom
+                        Socialize with dalida
                     </p>
                     <div className="flex gap-4 items-center justify-center">
                         <a href="#">
