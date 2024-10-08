@@ -20,7 +20,7 @@ const ProductDetails = () => {
         setTimeout(() => {
             setLoading(false);
         }, 500);
-        fetch(`http://pharmacy1.runasp.net/api/Product/${id}`)
+        fetch(`https://pharmacy1.runasp.net/pi/Product/${id}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to fetch product details");
@@ -36,7 +36,7 @@ const ProductDetails = () => {
     }, [id]);
 
     useEffect(() => {
-        fetch(`http://pharmacy1.runasp.net/api/ProductReview/GetAll`)
+        fetch(`https://pharmacy1.runasp.net/ProductReview/GetAll`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to fetch product reviews");
@@ -63,7 +63,7 @@ const ProductDetails = () => {
 
         setNewComment("");  
 
-        fetch(`http://pharmacy1.runasp.net/api/ProductReview/Add`, {
+        fetch(`https://pharmacy1.runasp.net/api/ProductReview/Add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
