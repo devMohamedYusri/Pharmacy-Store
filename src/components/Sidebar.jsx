@@ -7,11 +7,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [categories, setCategories] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+<<<<<<< HEAD
+=======
+  const [displayed, setDisplayed] = useState(null);
+>>>>>>> origin/main
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
       try {
+<<<<<<< HEAD
         const response = await fetch('https://pharmacy1.runasp.net/api/Category/GetAll');
+=======
+        const response = await fetch('http://pharmacy1.runasp.net/api/Category/GetAll');
+>>>>>>> origin/main
         if (!response.ok) {
           throw new Error('Failed to fetch categories');
         }
@@ -33,6 +41,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <ul>
         {categories && Array.isArray(categories) && categories.length > 0 ? (
           <>
+<<<<<<< HEAD
+=======
+            {console.log(categories, "from khaled")}
+>>>>>>> origin/main
             {categories.slice(1, 10).map((category) => (
               <Link key={category.categoryId} to="/shop">
                 <li className="border-spacing-1 border-gray-800 pb-4 px-4">{category.categoryName}</li>

@@ -29,7 +29,11 @@ function Register() {
         setTimeout(() => {
           setLoading(false);
         }, 100);
+<<<<<<< HEAD
         const response = await fetch("https://pharmacy1.runasp.net/api/Account/Register", {
+=======
+        const response = await fetch("http://pharmacy1.runasp.net/api/Account/Register", {
+>>>>>>> origin/main
           method: "post",
           headers: {
             'Content-Type': 'application/json'

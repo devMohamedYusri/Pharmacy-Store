@@ -18,7 +18,11 @@ export const AuthProvider = ({ children }) => {
 
             const fetchUserData = async () => {
                 try {
+<<<<<<< HEAD
                     const response = await fetch(`https://pharmacy1.runasp.net/api/Users/${email}`);
+=======
+                    const response = await fetch(`http://pharmacy1.runasp.net/api/Users/${email}`);
+>>>>>>> origin/main
                     if (!response.ok) throw new Error('Network response was not ok');
                     const data = await response.json();
                     setUser(data);

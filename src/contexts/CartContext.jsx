@@ -7,7 +7,11 @@ export const CartProvider = ({ children }) => {
 
     const fetchCartItems = async (cartId) => {
         try {
+<<<<<<< HEAD
             const response = await fetch(`https://pharmacy1.runasp.net/api/ShoppingCart/GetByIdAsync?id=${cartId}`);
+=======
+            const response = await fetch(`http://pharmacy1.runasp.net/api/ShoppingCart/GetByIdAsync?id=${cartId}`);
+>>>>>>> origin/main
             if (!response.ok) {
                 throw new Error('Failed to fetch cart items');
             }
@@ -20,7 +24,11 @@ export const CartProvider = ({ children }) => {
 
     const addToCart = async ({UserEmail,ProductId,Quantity,UnitPrice,LinePrice}) => {
         try {
+<<<<<<< HEAD
             const response = await fetch('https://pharmacy1.runasp.net/api/ShoppingCartItem/Add', {
+=======
+            const response = await fetch('http://pharmacy1.runasp.net/api/ShoppingCartItem/Add', {
+>>>>>>> origin/main
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +66,11 @@ export const CartProvider = ({ children }) => {
     // Function to remove items from the cart by ID
     const removeFromCart = async (id) => {
         try {
+<<<<<<< HEAD
             const response = await fetch(`https://pharmacy1.runasp.net/api/ShoppingCart/DeleteById?id=${id}`, {
+=======
+            const response = await fetch(`http://pharmacy1.runasp.net/api/ShoppingCart/DeleteById?id=${id}`, {
+>>>>>>> origin/main
                 method: 'DELETE',
             });
 
