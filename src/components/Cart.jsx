@@ -12,7 +12,7 @@ const Cart = () => {
         setTimeout(() => {
             setLoading(false);
         }, 500)
-        fetch('http://pharmacy1.runasp.net/api/ShoppingCartItem/GetAll')
+        fetch('https://pharmacy1.runasp.net/api/ShoppingCartItem/GetAll')
             .then(res => res.json())
             .then(data => {
                 setOrders(data);

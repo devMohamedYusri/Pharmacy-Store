@@ -20,11 +20,7 @@ const ProductDetails = () => {
         setTimeout(() => {
             setLoading(false);
         }, 500);
-<<<<<<< HEAD
         fetch(`https://pharmacy1.runasp.net/api/Product/${id}`)
-=======
-        fetch(`https://pharmacy1.runasp.net/pi/Product/${id}`)
->>>>>>> origin/main
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to fetch product details");
@@ -40,11 +36,7 @@ const ProductDetails = () => {
     }, [id]);
 
     useEffect(() => {
-<<<<<<< HEAD
         fetch(`https://pharmacy1.runasp.net/api/ProductReview/GetAll`)
-=======
-        fetch(`https://pharmacy1.runasp.net/ProductReview/GetAll`)
->>>>>>> origin/main
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to fetch product reviews");

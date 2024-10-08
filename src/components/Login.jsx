@@ -25,7 +25,7 @@ function Login() {
     setError(null);
 
     try {
-      const response = await fetch("http://pharmacy1.runasp.net/api/Account/Login", {
+      const response = await fetch("https://pharmacy1.runasp.net/api/Account/Login", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ function Login() {
       const data = await response.json();
       localStorage.setItem('token', data.token);
 
-      const res = await fetch(`http://pharmacy1.runasp.net/api/Users/${email}`);
+      const res = await fetch(`https://pharmacy1.runasp.net/api/Users/${email}`);
       if (!res.ok) {
         throw new Error('Failed to fetch user data');
       }

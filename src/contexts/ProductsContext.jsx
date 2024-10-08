@@ -9,11 +9,7 @@ export const ProductProvider = ({ children }) => {
     useEffect(() => {
         const fetchProducts = async () => {
             try{
-<<<<<<< HEAD
                 const response = await fetch('https://pharmacy1.runasp.net/api/Product/GetAll');
-=======
-                const response = await fetch('http://pharmacy1.runasp.net/api/Product/GetAll');
->>>>>>> origin/main
                 const data = await response.json();
                 setProducts(data);
             }catch (error){
