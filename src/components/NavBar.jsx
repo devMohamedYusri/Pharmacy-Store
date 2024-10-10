@@ -134,7 +134,7 @@ function NavBar({ logo }) {
                                         </li>
                                     </ul>
                                     <Link to="/cart">
-                                        <Button text="all orders" className={"mt-3 px-10 py-2 w-full bg-blue-600 hover:bg-blue-200"} type="button" />
+                                        <Button text="show Cart" className={"mt-3 px-10 py-2 w-full bg-blue-600 hover:bg-blue-200"} type="button" />
                                     </Link>
                                 </div>
                             )}

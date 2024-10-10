@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
         if (token && userData && !user) {
             const email = userData.email;
-
+            console.log(userData.email);
             const fetchUserData = async () => {
                 try {
                     const response = await fetch(`https://pharmacy1.runasp.net/api/Users/${email}`);

@@ -38,11 +38,12 @@ const Shop = () => {
             <div className="w-[90%] mx-auto">
                 <TitleSection title="Browse Shop Products" />
                 <div className="py-10 flex flex-wrap justify-center gap-5 mx-auto">
-                    {showedProducts.map(product => (
+                    {
+                    showedProducts.map(product => (
                         <ProductCard
                             key={product.productId}
                             id={product.productId}
-                            productImg={image1}
+                            productImg={'https://pharmacy1.runasp.net/Img/' + product.imageUrl}
                             productName={product.productName}
                             productPrice={product.price}
                             beforeDiscount={product.beforeDiscount}

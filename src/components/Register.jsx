@@ -21,14 +21,13 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (password == confirmPassword) {
       try {
         setLoading(true);
         setTimeout(() => {
           setLoading(false);
-        }, 100);
+        }, 300);
         const response = await fetch("https://pharmacy1.runasp.net/api/Account/Register", {
           method: "post",
           headers: {
@@ -46,7 +45,7 @@ function Register() {
           navigate('/');
         }
       } catch (err) {
-        setError(err.message);
+        console.log(err.message);
       } finally {
         setLoading(false);
       }
