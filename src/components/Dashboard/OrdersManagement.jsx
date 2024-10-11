@@ -1,16 +1,30 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Edit2, Trash2 } from 'lucide-react';
 import UpdateModal from './UpdateModal'; 
-
-const initialOrders = [
-    { id: 1, customerName: 'John Doe', totalAmount: '$100', status: 'Pending' },
-    { id: 2, customerName: 'Jane Smith', totalAmount: '$200', status: 'Completed' },
-];
+import { CartContext } from '../../contexts/CartContext';
+// const initialOrders = [
+//     { id: 1, customerName: 'John Doe', totalAmount: '$100', status: 'Pending' },
+//     { id: 2, customerName: 'Jane Smith', totalAmount: '$200', status: 'Completed' },
+// ];
 
 const OrdersManagement = () => {
-    const [orders, setOrders] = useState(initialOrders);
+    const [orders, setOrders] = useState([]); // Change initial state to an empty array
     const [selectedOrder, setSelectedOrder] = useState(null); 
     const [isModalOpen, setIsModalOpen] = useState(false); 
+    const { fetchAllOrders } = useContext(CartContext);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchAllOrders();
+                console.log("Fetched data:", data); 
+                setOrders(data); 
+            } catch (error) {
+                console.error("Error fetching orders:", error); 
+            }
+        };
+        fetchData();
+    }, []);
 
     const openModal = (order) => {
         setSelectedOrder(order);
@@ -55,11 +69,11 @@ const OrdersManagement = () => {
                 </thead>
                 <tbody>
                     {orders.map(order => (
-                        <tr key={order.id}>
-                            <td className="border border-gray-200 p-2">{order.id}</td>
+                        <tr key={order.orderId}>
+                            <td className="border border-gray-200 p-2">{order.orderId}</td>
                             <td className="border border-gray-200 p-2">{order.customerName}</td>
                             <td className="border border-gray-200 p-2">{order.totalAmount}</td>
-                            <td className="border border-gray-200 p-2">{order.status}</td>
+                            <td className="border border-gray-200 p-2">{order.orderStatus}</td>
                             <td className="border border-gray-200 p-2">
                                 <button onClick={() => openModal(order)} className="mr-2">
                                     <Edit2 className="inline" />

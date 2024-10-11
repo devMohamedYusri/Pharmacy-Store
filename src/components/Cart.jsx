@@ -1,24 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Plus, Minus, Trash2 } from 'lucide-react';
 import logo from "../assets/dalida.jpg";
 import Footer from './Footer';
 import NavBar from './NavBar';
 import Loader from './Loader';
+import secureLocalStorage from 'react-secure-storage'; // Import secureLocalStorage
+import { CartContext } from '../contexts/CartContext'; // Ensure fetchCartItems is imported
 
 const Cart = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { fetchCartItems } = useContext(CartContext);
+
     useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 500)
-        fetch('https://pharmacy1.runasp.net/api/ShoppingCartItem/GetAll')
-            .then(res => res.json())
-            .then(data => {
-                setOrders(data);
-                console.log(data);
-            }).catch(err => console.log(err))
-    }, []);
+        const fetchCart = async () => {
+            const id = JSON.parse(secureLocalStorage.getItem('user')).userId;
+            const data = await fetchCartItems(id); // Fetch cart items
+            console.log("Fetched Cart Data:", data);
+            setOrders(data); // Set orders instead of setCartData
+            setLoading(false); // Set loading to false after fetching
+        };
+
+        fetchCart(); // Call the fetchCart function
+    }, []); // Ensure the dependency array is empty to run only once
+
     const updateOrderQuantity = (orderId, amount) => {
         const updatedOrders = orders.map(order =>
             order.id === orderId
@@ -33,8 +38,7 @@ const Cart = () => {
     };
 
     const totalPrice = orders.reduce(
-        (total, order) => total + order.price * order.quantity,
-        0
+        (total, order) => total + order.price * order.quantity,0
     );
 
     return (
@@ -51,11 +55,6 @@ const Cart = () => {
                                     className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm"
                                 >
                                     <div className="flex items-center">
-                                        {/* <img
-                                        src={order.image}
-                                        alt={order.name}
-                                        className="w-24 h-24 rounded-lg object-cover"
-                                    /> */}
                                         <div className="ml-4">
                                             <h2 className="text-xl font-semibold">{order.name}</h2>
                                             <p className="text-sm text-gray-500">description: {order.description}</p>
@@ -129,4 +128,4 @@ const Cart = () => {
     );
 };
 
-export default Cart
+export default Cart;

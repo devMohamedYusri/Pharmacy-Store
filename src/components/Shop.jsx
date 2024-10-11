@@ -55,7 +55,7 @@ const Shop = () => {
                 <div className='flex justify-center mb-10'>
                     {
                         pages.map((i) =>
-                            <button onClick={() => handleClick(i)} key={i} className="border-blue-300 border-2 p-1 w-fit h-8 py-0 mx-1">
+                            <button onClick={() => handleClick(i)} key={i} className="bg-blue-500 hover:bg-blue-700 ml-2 text-white font-bold py-2 px-4 rounded">
                                 {i}
                             </button>
                         )}

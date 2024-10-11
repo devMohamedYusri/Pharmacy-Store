@@ -39,16 +39,16 @@ function Login() {
 
       const data = await response.json();
       localStorage.setItem('token', data.token);
-
+      
+      
       const res = await fetch(`https://pharmacy1.runasp.net/api/Users/${email}`);
       if (!res.ok) {
         throw new Error('Failed to fetch user data');
       }
 
       const resJson = await res.json();
-      secureLocalStorage.setItem('user', JSON.stringify(resJson));
+      secureLocalStorage.setItem('user', JSON.stringify({...resJson,userId:data.userId}));
       
-      navigate('/');
     } catch (err) {
       setError(err.message);
     } finally {

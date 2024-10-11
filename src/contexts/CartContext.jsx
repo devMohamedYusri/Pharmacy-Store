@@ -1,24 +1,42 @@
-import { createContext, useState, useEffect } from 'react';
-
+import { createContext, useState } from 'react';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
 
-    const fetchCartItems = async (cartId) => {
+    const fetchCartItems = async (userId) => {
         try {
-            const response = await fetch(`https://pharmacy1.runasp.net/api/ShoppingCart/GetByIdAsync?id=${cartId}`);
+            const response = await fetch(`https://pharmacy1.runasp.net/api/ShoppingCartItem/GetItemsByUserId/${userId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch cart items');
             }
             const data = await response.json();
-            setCartItems(data);
+            return data;
         } catch (error) {
             console.error('Error fetching cart items:', error);
+            return []; 
         }
     };
 
-    const addToCart = async ({UserEmail,ProductId,Quantity,UnitPrice,LinePrice}) => {
+    const fetchAllOrders = async () => {
+        try {
+            const response = await fetch(`https://pharmacy1.runasp.net/api/Orders/GetAllAsync`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch all orders');
+            }
+            const data = await response.json();
+            console.log(data);
+            return data;
+        } catch (error) {
+            console.error('Error fetching all orders:', error);
+            return []; 
+        }
+    };
+    
+    // Add item to cart
+    const addToCart = async ({ UserId, ProductId, Quantity, UnitPrice, LineTotal }) => {
+        console.log('auth error in cart Item ', ProductId, UserId, Quantity, UnitPrice, LineTotal);
+
         try {
             const response = await fetch('https://pharmacy1.runasp.net/api/ShoppingCartItem/Add', {
                 method: 'POST',
@@ -26,35 +44,31 @@ export const CartProvider = ({ children }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "ProductId":ProductId,
-                    "Quantity": Quantity,
-                    "UnitPrice":  UnitPrice,
-                    "LineTotal": LinePrice,
-                    "email": UserEmail
+                    ProductId: ProductId,
+                    Quantity: Quantity,
+                    UnitPrice: UnitPrice,
+                    LineTotal: LineTotal,
+                    UserId: UserId
                 }),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to add item to cart');
+                const errorData = await response.json();
+                console.error('Error response:', errorData); 
+                throw new Error(`Failed to add item to cart: ${errorData.title || response.statusText}`);
             }
 
-            setCartItems((prevItems) => {
-                const existingItem = prevItems.find(cartItem => cartItem.id === item.id);
-                if (existingItem) {
-                    return prevItems.map(cartItem =>
-                        cartItem.id === item.id
-                            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                            : cartItem
-                    );
-                }
-                return [...prevItems, { ...item, quantity: 1 }];
-            });
+            const data = await response.json();
+            console.log('Item added to cart:', data);
+
+            // Optionally update state or perform additional actions
+            setCartItems((prevItems) => [...prevItems, { ...data, quantity: Quantity }]);
         } catch (error) {
             console.error('Error adding item to cart:', error);
         }
     };
 
-    // Function to remove items from the cart by ID
+    // Remove item from cart by ID
     const removeFromCart = async (id) => {
         try {
             const response = await fetch(`https://pharmacy1.runasp.net/api/ShoppingCart/DeleteById?id=${id}`, {
@@ -66,16 +80,14 @@ export const CartProvider = ({ children }) => {
             }
 
             // Update local state after successful deletion
-            setCartItems((prevItems) => 
-                prevItems.filter(cartItem => cartItem.id !== id)
-            );
+            setCartItems((prevItems) => prevItems.filter((cartItem) => cartItem.id !== id));
         } catch (error) {
             console.error('Error removing item from cart:', error);
         }
     };
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, fetchCartItems }}>
+        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, fetchCartItems ,fetchAllOrders}}>
             {children}
         </CartContext.Provider>
     );

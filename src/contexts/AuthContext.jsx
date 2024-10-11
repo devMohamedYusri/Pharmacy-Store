@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         const userData = JSON.parse(secureLocalStorage.getItem('user'));
-
         if (token && userData && !user) {
             const email = userData.email;
             console.log(userData.email);
@@ -21,13 +20,12 @@ export const AuthProvider = ({ children }) => {
                     const response = await fetch(`https://pharmacy1.runasp.net/api/Users/${email}`);
                     if (!response.ok) throw new Error('Network response was not ok');
                     const data = await response.json();
-                    setUser(data);
                     setIsAuth(data.roleId === 1);
+                    setUser(userData);
                 } catch (error) {
                     console.error("Error fetching user data:", error);
                 }
             };
-
             fetchUserData();
         }
     }, [user]);
