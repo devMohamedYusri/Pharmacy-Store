@@ -74,7 +74,7 @@ function NavBar({ logo }) {
                 try {
                     const response = await fetch(`https://pharmacy1.runasp.net/api/Product/getbyname?s=${content}`);
                     const data = await response.json();
-                    setSearch(data);
+                    setSearch(data.slice(1,17));
                     console.log(data);
                 } catch (error) {
                     console.log("error is ", error)
@@ -120,9 +120,9 @@ function NavBar({ logo }) {
                             onChange={changed}
                         />
                         {search && focus && (
-                            <div className="absolute top-full left-0 w-full bg-white shadow-lg mt-2 z-50">
+                            <div className="absolute top-full left-0 w-full bg-blue-400 shadow-lg mt-2 z-50">
                                 {search.map((item) => (
-                                    <Link key={item.productId} to={""} className="p-2 hover:bg-gray-100 w-full block">
+                                    <Link key={item.productId} to={`/product/details/${item.productId}`} className="p-2 text-white hover:bg-blue-100 hover:text-black bg-blue-500 w-full block">
                                         {item.productName}
                                     </Link>
                                 ))}
@@ -130,12 +130,6 @@ function NavBar({ logo }) {
                         )}
                     </div>
                     <div className="flex items-center gap-4 w-2/5 h-full justify-end">
-                        {/* <div >
-                        <Link to="/store-finder" className="flex flex-col items-center">
-                            <Store />
-                            <span>Store Finder</span>
-                        </Link>
-                    </div> */}
                         <div >
                             <Link to={isLogged ? "" : "/login"} onClick={toggleDropdown} className="flex flex-col items-center">
                                 <UserRound />
@@ -159,13 +153,12 @@ function NavBar({ logo }) {
                                 <ShoppingBag />
                                 <span>My Bag</span>
                             </button>
-
                             {isOpen && (
                                 <div className="absolute right-0 z-10 w-64 mt-2 bg-white border border-gray-300 rounded-md shadow-lg">
                                     <ul className="py-1">
                                         {CartData && Array.isArray(CartData) && CartData.length > 0 ? (
                                             CartData.map(item => (
-                                                <li key={item.id} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                                                <li key={item.orderId} className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                                                     {item.productName} {/* Ensure this matches the data structure */}
                                                 </li>
                                             ))

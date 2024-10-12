@@ -89,14 +89,13 @@ const ProductDetails = () => {
             {loading ? <Loader visible={loading} /> : (
                 <>
                     <NavBar logo={logo} />
-                    <div className="container mx-auto p-5 w-[90%]">
+                    <div className="container mx-auto p-5 pt-10 w-[90%]">
                         <Details
                             imageUrl={img}
                             name={product.productName}
                             desc={product.description}
                             price={product.price}
                             quantity={product.quantityInStock}
-                            shippingInfo={"dkkdkd"}
                         />
 
                         <div className="mt-10">

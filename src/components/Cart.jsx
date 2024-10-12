@@ -4,8 +4,8 @@ import logo from "../assets/dalida.jpg";
 import Footer from './Footer';
 import NavBar from './NavBar';
 import Loader from './Loader';
-import secureLocalStorage from 'react-secure-storage'; // Import secureLocalStorage
-import { CartContext } from '../contexts/CartContext'; // Ensure fetchCartItems is imported
+import secureLocalStorage from 'react-secure-storage'; 
+import { CartContext } from '../contexts/CartContext'; 
 
 const Cart = () => {
     const [orders, setOrders] = useState([]);
@@ -15,14 +15,14 @@ const Cart = () => {
     useEffect(() => {
         const fetchCart = async () => {
             const id = JSON.parse(secureLocalStorage.getItem('user')).userId;
-            const data = await fetchCartItems(id); // Fetch cart items
+            const data = await fetchCartItems(id); 
             console.log("Fetched Cart Data:", data);
-            setOrders(data); // Set orders instead of setCartData
-            setLoading(false); // Set loading to false after fetching
+            setOrders(data); 
+            setLoading(false); 
         };
 
-        fetchCart(); // Call the fetchCart function
-    }, []); // Ensure the dependency array is empty to run only once
+        fetchCart(); 
+    }, []); 
 
     const updateOrderQuantity = (orderId, amount) => {
         const updatedOrders = orders.map(order =>
@@ -51,14 +51,14 @@ const Cart = () => {
                             <h1 className="text-3xl font-bold mb-6">Cart</h1>
                             {orders.map(order => (
                                 <div
-                                    key={order.id}
+                                    key={order.CartItemId}
                                     className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm"
                                 >
                                     <div className="flex items-center">
                                         <div className="ml-4">
-                                            <h2 className="text-xl font-semibold">{order.name}</h2>
-                                            <p className="text-sm text-gray-500">description: {order.description}</p>
-                                            <p className="text-lg font-bold text-gray-800">${order.price}</p>
+                                            <h2 className="text-xl font-semibold">{order.productName}</h2>
+                                            <p className="text-sm text-gray-500">description: {order.productDescription}</p>
+                                            <p className="text-lg font-bold text-gray-800">${order.unitPrice}</p>
                                             <p
                                                 className={`text-sm ${order.inStock ? 'text-green-500' : 'text-red-500'
                                                     }`}

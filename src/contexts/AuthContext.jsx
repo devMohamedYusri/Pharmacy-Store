@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
         const userData = JSON.parse(secureLocalStorage.getItem('user'));
         if (token && userData && !user) {
             const email = userData.email;
-            console.log(userData.email);
             const fetchUserData = async () => {
                 try {
                     const response = await fetch(`https://pharmacy1.runasp.net/api/Users/${email}`);

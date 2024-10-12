@@ -10,15 +10,12 @@ function ProductCard({ id, productImg, productName, productPrice, beforeDiscount
     const discount = beforeDiscount ? Math.floor((1 - productPrice / beforeDiscount) * 100) : 0;
     const {user}=useAuth();
     const handleClick = () => {
-        console.log("form product card user,", user);
-    
-        // Pass parameters as an object with correct values
-        addToCart({
+            addToCart({
             UserId: user.userId,
             ProductId: id,
             Quantity: 1,
             UnitPrice: productPrice,
-            LineTotal: productPrice  // LineTotal is the total price for the quantity
+            LineTotal: productPrice  
         });
     };
     

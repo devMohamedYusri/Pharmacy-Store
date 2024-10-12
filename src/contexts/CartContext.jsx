@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
         }
     };
     
-    // Add item to cart
+
     const addToCart = async ({ UserId, ProductId, Quantity, UnitPrice, LineTotal }) => {
         console.log('auth error in cart Item ', ProductId, UserId, Quantity, UnitPrice, LineTotal);
 
@@ -61,14 +61,14 @@ export const CartProvider = ({ children }) => {
             const data = await response.json();
             console.log('Item added to cart:', data);
 
-            // Optionally update state or perform additional actions
+            
             setCartItems((prevItems) => [...prevItems, { ...data, quantity: Quantity }]);
         } catch (error) {
             console.error('Error adding item to cart:', error);
         }
     };
 
-    // Remove item from cart by ID
+    
     const removeFromCart = async (id) => {
         try {
             const response = await fetch(`https://pharmacy1.runasp.net/api/ShoppingCart/DeleteById?id=${id}`, {

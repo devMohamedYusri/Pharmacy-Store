@@ -2,10 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { Edit2, Trash2 } from 'lucide-react';
 import UpdateModal from './UpdateModal'; 
 import { CartContext } from '../../contexts/CartContext';
-// const initialOrders = [
-//     { id: 1, customerName: 'John Doe', totalAmount: '$100', status: 'Pending' },
-//     { id: 2, customerName: 'Jane Smith', totalAmount: '$200', status: 'Completed' },
-// ];
 
 const OrdersManagement = () => {
     const [orders, setOrders] = useState([]); // Change initial state to an empty array
@@ -71,7 +67,7 @@ const OrdersManagement = () => {
                     {orders.map(order => (
                         <tr key={order.orderId}>
                             <td className="border border-gray-200 p-2">{order.orderId}</td>
-                            <td className="border border-gray-200 p-2">{order.customerName}</td>
+                            <td className="border border-gray-200 p-2">{order.userName}</td>
                             <td className="border border-gray-200 p-2">{order.totalAmount}</td>
                             <td className="border border-gray-200 p-2">{order.orderStatus}</td>
                             <td className="border border-gray-200 p-2">
